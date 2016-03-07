@@ -42,7 +42,9 @@ module MongoidAutoIncrement
       end
 
       def collection
-        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION > '3'
+        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION >= '5'
+          Mongoid.default_client[@collection]
+        elsif defined?(::Mongoid::VERSION) && ::Mongoid::VERSION > '3'
           Mongoid.default_session[@collection]
         else
           Mongoid.database[@collection]
