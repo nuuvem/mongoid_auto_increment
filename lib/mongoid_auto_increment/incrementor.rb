@@ -26,7 +26,9 @@ module MongoidAutoIncrement
        end
 
       def current
-        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION > '3'
+        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION >= '5'
+          collection.find(query).first["number"]
+        elsif defined?(::Mongoid::VERSION) && ::Mongoid::VERSION > '3'
           collection.find(query).one["number"]
         else
           collection.find_one(query)["number"]
