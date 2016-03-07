@@ -38,7 +38,11 @@ module MongoidAutoIncrement
       end
 
       def create(number)
-        collection.insert(query.merge({ "number" => number }))
+        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION >= '5'
+          collection.create(query.merge({ "number" => number }))
+        else
+          collection.insert(query.merge({ "number" => number }))
+        end
       end
 
       def collection
