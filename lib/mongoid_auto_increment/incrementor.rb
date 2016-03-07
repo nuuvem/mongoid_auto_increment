@@ -11,7 +11,9 @@ module MongoidAutoIncrement
       end
 
        def inc
-        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION > '3'
+        if defined?(::Mongoid::VERSION) && ::Mongoid::VERSION >= '5'
+          collection.find(query).find_one_and_update({ '$inc' => { number: @step } }, new: true, upsert: true)['number']
+        elsif defined?(::Mongoid::VERSION) && ::Mongoid::VERSION > '3'
           collection.find(query).modify({ '$inc' => { number: @step } }, new: true, upsert: true)['number']
         else
           opts = {
